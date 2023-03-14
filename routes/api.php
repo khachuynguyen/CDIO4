@@ -26,5 +26,6 @@ Route::prefix("auth")->group(function (){
 //Product controller
 Route::prefix("products")->group(function (){
     Route::get("",[\App\Http\Controllers\ProductController::class,'getAllProducts']);
+    Route::get("/{id}",[\App\Http\Controllers\ProductController::class,'getProductById']);
     Route::post("",[\App\Http\Controllers\ProductController::class,'createProduct']);
 });

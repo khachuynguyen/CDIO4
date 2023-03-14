@@ -41,6 +41,7 @@ class CreateProductRequest extends FormRequest
             'weight'=>'required|string|max:255',
             'pin'=>'required|string|max:255',
             'operation_system'=>'required|string|max:255',
+            'quantity'=>'required|numeric'
         ];
     }
     protected function failedValidation(Validator $validator)

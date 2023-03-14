@@ -14,9 +14,9 @@ class ProductRepository implements ProductInterface
         return Product::all();
     }
 
-    function findProductById(int $id): Product
+    function findProductById(int $id): null|Product
     {
-        return Product::all()->find($id);
+        return Product::where('product_id',$id)->get()->first();
     }
 
     function deleteProduct(int $id): bool
