@@ -27,5 +27,7 @@ Route::prefix("auth")->group(function (){
 Route::prefix("products")->group(function (){
     Route::get("",[\App\Http\Controllers\ProductController::class,'getAllProducts']);
     Route::get("/{id}",[\App\Http\Controllers\ProductController::class,'getProductById']);
+    Route::put("/{id}",[\App\Http\Controllers\ProductController::class,'updateProduct']);
+    Route::delete("/{id}",[\App\Http\Controllers\ProductController::class,'deleteProduct']);
     Route::post("",[\App\Http\Controllers\ProductController::class,'createProduct']);
 });

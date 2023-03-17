@@ -44,15 +44,18 @@ class ProductService
         return $savedProduct;
     }
 
-    public function updateProduct(array $arr): bool
+    public function updateProduct(int $id,array $arr): bool
     {
-        $product = $this->getProductById($arr['product_id']);
-        dd(123);
+        $product = $this->getProductById($id);
         foreach ($arr as $key => $value) {
             $product->$key = $value;
         }
-        $savedProduct = $product->save();
-        return $savedProduct;
+        return $product->save();
+    }
+    public function deleteProduct(int $id): bool
+    {
+        $product = $this->getProductById($id);
+        return $this->productRepository->deleteProduct($id);
     }
 
 }

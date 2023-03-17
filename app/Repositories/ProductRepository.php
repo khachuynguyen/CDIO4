@@ -16,14 +16,17 @@ class ProductRepository implements ProductInterface
 
     function findProductById(int $id): null|Product
     {
-        return Product::where('product_id',$id)->get()->first();
+        return Product::find($id);
     }
 
     function deleteProduct(int $id): bool
     {
         return $this->findProductById($id)->delete();
     }
-
+    public function updateProduct(array $arr)
+    {
+        $query = Product::query()->update($arr);
+    }
     /**
      * @inheritDoc
      */
@@ -55,4 +58,6 @@ class ProductRepository implements ProductInterface
     {
         // TODO: Implement clear() method.
     }
+
+
 }
