@@ -29,6 +29,25 @@ class ProductController extends Controller
             return response()->json(null, 500);
         }
     }
+    public function getAllManufacturers(): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $data = $this->productService->getAllManufacturers();
+            return response()->json($data, 200);
+        } catch (\Exception $exception) {
+            return response()->json(null, 500);
+        }
+    }
+    public function searchProduct(Request $request): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $array_keys = $request->all();
+            $data = $this->productService->searchProducts($array_keys);
+            return response()->json($data, 200);
+        } catch (\Exception $exception) {
+            return response()->json(null, 500);
+        }
+    }
 
     public function createProduct(CreateProductRequest $request): \Illuminate\Http\JsonResponse
     {
@@ -41,7 +60,12 @@ class ProductController extends Controller
     {
         try {
             $found = $this->productService->getProductById($id);
-            return response()->json($found, 200);
+            $suggest = $this->productService->getSuggestedProduct($found);
+            $data = [
+                'product' => $found,
+                'suggest' => $suggest
+            ];
+            return response()->json($data, 200);
         } catch (\Exception $exception) {
             return response()->json($exception->getMessage(), 404);
         }

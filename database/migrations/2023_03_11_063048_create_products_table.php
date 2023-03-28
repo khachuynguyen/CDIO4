@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("product_name",50);
             $table->binary("avatar");
             $table->string("description");
+            $table->string("manufacturer");
             $table->double("price");
             $table->double("cost");
             $table->integer("quantity")->nullable(false);

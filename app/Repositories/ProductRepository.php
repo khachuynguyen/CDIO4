@@ -13,6 +13,11 @@ class ProductRepository implements ProductInterface
     {
         return Product::all();
     }
+    function getAllManufacturers(): Collection
+    {
+        $query = Product::query();
+        return $query->select('manufacturer')->distinct()->get();
+    }
 
     function findProductById(int $id): null|Product
     {
@@ -57,6 +62,24 @@ class ProductRepository implements ProductInterface
     public function clear(string $name)
     {
         // TODO: Implement clear() method.
+    }
+
+    public function searchProduct(array $array_keys):Collection
+    {
+        $query = Product::query();
+        if($array_keys['manufacturer'])
+            $query->where('manufacturer','=',$array_keys['manufacturer']);
+        return $query->get();
+    }
+
+    public function getSuggestedProduct(string $manufacturer, int $id):Collection
+    {
+        $query = Product::query();
+        $query->where('manufacturer','=',$manufacturer);
+        $query->where('id','!=',$id);
+        $query->orderBy('created_at','desc');
+        $arr = $query->take(3)->get();
+        return $arr;
     }
 
 

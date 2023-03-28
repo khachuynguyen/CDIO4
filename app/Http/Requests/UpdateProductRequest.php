@@ -12,7 +12,6 @@ class UpdateProductRequest extends CreateProductRequest
             'product_name'=>'required|min:6',
             'avatar'=>'required',
             'description'=>'required',
-            'price'=>'required|digits_between:5,10',
             'cost'=>'required|digits_between:5,10',
             'percent'=>'required|numeric',
             'cpu'=>'required|string|max:32',

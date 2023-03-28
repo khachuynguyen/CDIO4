@@ -29,7 +29,7 @@ class CreateProductRequest extends FormRequest
             'product_name'=>'required|min:6|unique:products,product_name',
             'avatar'=>'required',
             'description'=>'required',
-            'price'=>'required|digits_between:5,10',
+            'manufacturer'=>'required|string',
             'cost'=>'required|digits_between:5,10',
             'percent'=>'required|numeric',
             'cpu'=>'required|string|max:32',

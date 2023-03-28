@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string("paymentMethods");
             $table->double("total");
-            $table->string("trading_code");
+            $table->integer("user_id");
+            $table->string("trading_code")->nullable();
             $table->boolean("is_payment");
             $table->boolean("is_transported");
             $table->boolean("is_success");
