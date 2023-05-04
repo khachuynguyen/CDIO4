@@ -22,6 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 //AuthController
 Route::prefix("auth")->group(function (){
+    Route::get("",[AuthController::class,'getListUser'])->middleware('auth:api');
+    Route::put("/{id}",[AuthController::class,'updateUserInfo'])->middleware('auth:api');
+    Route::get("/{id}",[AuthController::class,'getUserInfo'])->middleware('auth:api');
     Route::post("register",[AuthController::class,'registerUser']);
     Route::post("login",[AuthController::class,'login']);
 });
@@ -51,9 +54,11 @@ Route::prefix("carts")->group(function (){
 Route::prefix("orders")->group(function (){
     Route::middleware('auth:api')->group(
         function (){
+            //lay tat ca don hang theo userid hoac neu la admin thi lay tat ca don hang
             Route::get("",[\App\Http\Controllers\OrderController::class,'getAllOrders']);
             Route::get("/{id}",[\App\Http\Controllers\OrderController::class,'getOrderByOderId']);
-            Route::put("/{id}",[CartController::class,'updateProduct']);
+            //cap nhat trang thai duyet hay tu choi danh cho admin
+            Route::put("/{id}",[\App\Http\Controllers\OrderController::class,'adminUpdateStatusOrder']);
             Route::delete("/{product_id}",[CartController::class,'deleteCart']);
             Route::post("",[\App\Http\Controllers\OrderController::class,'offlinePayment']);
             Route::post("/{id}",[\App\Http\Controllers\OrderController::class,'onlinePayment']);
@@ -61,6 +66,7 @@ Route::prefix("orders")->group(function (){
     );
 });
 Route::prefix("online")->group( function (){
+    //update trạng thai da thanh toan va ma hoa don thanh thoan
     Route::post("",[\App\Http\Controllers\OrderController::class,'updateInfoOrder'])->middleware('auth:api');
 });
 

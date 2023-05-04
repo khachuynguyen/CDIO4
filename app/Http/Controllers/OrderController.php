@@ -29,7 +29,11 @@ class OrderController extends Controller
     }
     public function getAllOrders(Request $request): \Illuminate\Http\JsonResponse
     {
-        $orders = $this->orderService->getAllOrder(Auth::id());
+        $orders = [];
+        if(Auth::user()->role == "ADMIN")
+            $orders = $this->orderService->getAllOrderAdmin();
+        else
+            $orders = $this->orderService->getAllOrder(Auth::id());
         return response()->json($orders,200);
     }
     public function createOrder(Request $request):Order|null{
@@ -65,7 +69,23 @@ class OrderController extends Controller
             return response()->json(['order'=>$order,'list_order_detail'=>$list_order_detail],200);
         return response()->json("Failed",500);
     }
+    public function adminUpdateStatusOrder(Request $request, int $id): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $user= Auth::user();
+            if(strtoupper($user->role) != "ADMIN")
+                throw new \Exception("Unauth",422);
+            $order = Order::query()->where('id','=', $id)->get()->first();
+            $order->is_success = $request->get('is_success');
+            $bool = $order->save();
+            return response()->json($bool,200);
+        }catch (\Exception $exception){
+            if($exception->getCode() == 422 )
+                return response()->json($exception->getMessage(),$exception->getCode());
+            return response()->json(null,500);
+        }
 
+    }
     public function updateInfoOrder(Request $request): \Illuminate\Http\JsonResponse
     {
         try {

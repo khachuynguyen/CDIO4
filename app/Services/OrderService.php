@@ -107,6 +107,10 @@ class OrderService
     {
         return $this->orderRepository->getAllOrders($id);
     }
+    public function getAllOrderAdmin():Collection
+    {
+        return $this->orderRepository->getAllAdmin();
+    }
     public function getOrderById(int $id):Order|null
     {
         $order = $this->orderRepository->getOrderById($id);

@@ -3,15 +3,66 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
+    public function getUserInfo(Request $request, int $id): JsonResponse
+    {
+        $user = Auth::user();
+        if(strtoupper($user->role) != "ADMIN")
+        {
+            return \response()->json($user,200);
+        }
+        else
+        {
+            $found = User::find($id);
+            return \response()->json($found,200);
+        }
+    }
+    public function getListUser(Request $request): JsonResponse
+    {
+        $user = Auth::user();
+        if(strtoupper($user->role) != "ADMIN")
+            return \response()->json($user,200);
+        else{
+            $list = User::all();
+            return \response()->json($list,200);
+        }
+    }
+    public function updateUserInfo(UpdateUserRequest $request, int $id): JsonResponse
+    {
+        $user = Auth::user();
+        try {
+            if(Auth::id() == $id || strtoupper($user->role) == "ADMIN")
+            {
+                $found = User::query()->where('id','=', $id)->first();
+                foreach ($request as $key => $value){
+                    if($key == 'password')
+                    {
+                        $found->$key = bcrypt($value) ;
+                        continue;
+                    }
+                    $found->$key = $value;
+                }
+                $bool = $found->save();
+                return response()->json( $bool, 200);
+            }
+            else
+                throw new \Exception("Unauth",422);
+        }catch (\Exception $exception){
+            if($exception->getCode()==422)
+                return response()->json( $exception->getMessage(), $exception->getCode());
+            return response()->json( null, 500);
+        }
+
+    }
+
     public function registerUser(RegisterRequest $request): JsonResponse
     {
         $user = new User();

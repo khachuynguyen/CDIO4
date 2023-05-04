@@ -45,6 +45,10 @@ class OrderRepository implements \App\Interfaces\OrderInterface
     {
         return Order::query()->where('user_id','=',$user_id)->orderByDesc('created_at')->get();
     }
+    function getAllAdmin(): Collection
+    {
+        return Order::all();
+    }
 
     function getOrderById(int $id): Order|null
     {
